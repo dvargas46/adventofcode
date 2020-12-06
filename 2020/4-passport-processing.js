@@ -105,7 +105,5 @@ function processFilePartI(file) {
             });
             return passportJSON;
         });
-
-
     return parsedJson
 }
