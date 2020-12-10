@@ -1,9 +1,12 @@
 const processFile = require('./file-processor');
 const inputfile = './inputs/8-input.txt';
 
-
 // PART I
-const input = processFile(inputfile);
+const input = processFile(inputfile, {
+    lineSeparator: '\n',
+    groupSeparator: new RegExp("\\s\\+|\\s", 'g'),
+}).map(instr => instr.concat([0]));
+
 const runProgram = (acc, index, arr) => {
     if (index === arr.length) return [acc, true]; // REACHED THE END, GRACEFULLY TERMINATE
 
@@ -29,7 +32,11 @@ console.log(`Accumulator value: ${resultI[0]}`);
 
 
 // PART II
-const input2 = processFile(inputfile);
+const input2 = processFile(inputfile, {
+    lineSeparator: new RegExp("\\n", 'g'),
+    groupSeparator: new RegExp("\\s\\+|\\s", 'g'),
+}).map(instr => instr.concat([0]));
+
 const getArrayClone = (arr) => JSON.parse(JSON.stringify(arr));
 const fixProgram = (arr) => {
     const index = arr.findIndex((instr, index) => {
