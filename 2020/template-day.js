@@ -1,5 +1,5 @@
-const inputfile = './inputs/10-day.txt';
-// const inputfile = './inputs/10-day-example.txt';
+const inputfile = './inputs/XX-day.txt';
+// const inputfile = './inputs/XX-day-example.txt';
 const processFile = require('./file-processor');
 
 
