@@ -48,8 +48,17 @@ function testProcessArrayOfArrayNoRegex() {
 function testProcessJsonWithRegex() {
     const expected = testFileJsonExpected;
     const actual = fileProcessor(testFileJson, {
-        lineSeparator: new RegExp('\n', 'g'),
-        jsonSeparator: new RegExp(':', 'g')
+        lineSeparator: new RegExp('\\n', 'g'),
+        jsonSeparator: new RegExp(':', 'g'),
+    });
+    assertTrue(expected, actual);
+}
+
+function testProcessJsonNoRegex() {
+    const expected = testFileJsonExpected;
+    const actual = fileProcessor(testFileJson, {
+        lineSeparator: '\n',
+        jsonSeparator: ':',
     });
     assertTrue(expected, actual);
 }
@@ -57,7 +66,19 @@ function testProcessJsonWithRegex() {
 function testProcessArrayOfJsonWithRegex() {
     const expected = testFileArrayOfJsonExpected;
     const actual = fileProcessor(testFileArrayOfJson, {
-        lineSeparator: new RegExp('\n', 'g'),
+        lineSeparator: new RegExp('\\n\\n', 'g'),
+        groupSeparator: new RegExp('\\n|\\s', 'g'),
+        jsonSeparator: new RegExp(':', 'g'),
+    });
+    assertTrue(expected, actual);
+}
+
+function testProcessArrayOfJsonNoRegex() {
+    const expected = testFileArrayOfJsonExpected;
+    const actual = fileProcessor(testFileArrayOfJson, {
+        lineSeparator: '\n\n',
+        groupSeparator: '\n',
+        jsonSeparator: ':',
     });
     assertTrue(expected, actual);
 }
@@ -68,6 +89,9 @@ testProcessPlainArrayNoRegex();
 testProcessArrayOfArrayWithRegex();
 testProcessArrayOfArrayNoRegex();
 testProcessJsonWithRegex();
+testProcessJsonNoRegex();
+testProcessArrayOfJsonWithRegex();
+// testProcessArrayOfJsonNoRegex();
 
 
 
