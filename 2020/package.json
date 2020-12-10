@@ -1,0 +1,19 @@
+{
+  "name": "2020",
+  "version": "1.0.0",
+  "description": "",
+  "main": "10-day.js",
+  "directories": {
+    "start": "node 10-day.js",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "combinations-js": "^1.1.2"
+  }
+}
