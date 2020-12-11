@@ -112,6 +112,3 @@ const simulate2 = (arr) => {
 const numberOfScenarios2 = simulateAllScenarios(input2, simulate2);
 const result2 = input2.reduce((tot, row) => row.reduce((subtot, seat) => seat === '#' ? subtot+1 : subtot, 0) + tot, 0);
 console.log(numberOfScenarios2, result2);
-
-// const result2 = input1;
-// console.log(result2);
