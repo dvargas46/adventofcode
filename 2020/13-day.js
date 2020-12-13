@@ -1,5 +1,5 @@
-const inputfile = './inputs/XX-input.txt';
-// const inputfile = './inputs/XX-example.txt';
+// const inputfile = './inputs/13-input.txt';
+const inputfile = './inputs/13-example.txt';
 const processFile = require('./file-processor');
 
 
@@ -10,7 +10,17 @@ const input1 = processFile(inputfile, {
     // jsonSeparator: new RegExp(':', 'g')
 });
 
-const result1 = input1;
+
+const temp = input1;
+const result1 = input1
+    .map(data => {
+
+    })
+    .reduce(data => {
+
+    });
+
+console.log(temp);
 console.log(result1);
 
 
