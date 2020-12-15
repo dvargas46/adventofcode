@@ -8,7 +8,7 @@ const input1 = processFile(inputfile, {
     lineSeparator: ',',
 });
 
-let memory = input1.reduce((mem, val) => (mem[val]=[counter++], mem), {});
+const memory = input1.reduce((mem, val) => (mem[val]=[counter++], mem), {});
 let lastNumberSpoken = input1[input1.length-1];
 
 const addToMemory = (num) => {
@@ -36,14 +36,11 @@ const runTurns = (MAX) => {
         }
     }
 }
-runTurns(2020);
 
-// console.log(memory);
-console.log(counter-1, lastNumberSpoken);
+// PART I
+// runTurns(2020);
 
 // PART II
-memory = input1.reduce((mem, val) => (mem[val]=[counter++], mem), {});
-let lastNumberSpoken = input1[input1.length-1];
 runTurns(30000000);
 
 // DON'T PRINT THE MEMORY FOR PART II --- YOU WILL REGRET IT
