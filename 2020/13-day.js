@@ -1,6 +1,7 @@
 const inputfile = './inputs/13-input.txt';
 // const inputfile = './inputs/13-example.txt';
 const processFile = require('./file-processor');
+const lcm = require('compute-lcm');
 
 
 // PART I
@@ -35,10 +36,22 @@ const input2 = input1
     .flat()
     .map((id, ix) => [ix, parseInt(id)])
     .filter(dt => !isNaN(dt[1]));
+const max = input2.reduce((m, i) => i[1] > m[1] ? i : m, [0,0]);
 
+// const first = input2.shift()[1];
 console.log(input2);
-const last = input2[input2.length-1];
-console.log(last);
+console.log(max);
+let t = max[1]-max[0];
+let inc = max[1];
+console.log(t, inc, t+inc, t+inc*2)
+
+// let a=[];
+// const lcms = input2.map((val) => [...val, first, lcm(first, val[1])]);
+// console.log(lcms);
+
+// const last = input2[input2.length-1];
+// console.log(last);
+
 
 // counter = 133;
 // while(counter < 10000000) {
@@ -51,13 +64,13 @@ console.log(last);
 //     }
 // }
 // console.log('done');
-counter = 100000000000250;
-while(counter < 1000000000000000) {
-    counter += 779;
-    if (input2.every(data => (counter - (last[0] - data[0])) % data[1] === 0)) {
-        console.log(counter);
-        break;
-    }
-}
+// counter = 100000000000250;
+// while(counter < 1000000000000000) {
+//     counter += 779;
+//     if (input2.every(data => (counter - (last[0] - data[0])) % data[1] === 0)) {
+//         console.log(counter);
+//         break;
+//     }
+// }
 // const result2 = input1;
 // console.log(result2);

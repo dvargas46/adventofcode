@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "combinations-js": "^1.1.2"
+    "combinations-js": "^1.1.2",
+    "compute-lcm": "^1.1.2"
   }
 }
