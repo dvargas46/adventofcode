@@ -35,7 +35,7 @@ const result1 = otherTicketNumbers.reduce((sumOfInvalid, num) => {
 }, 0);
 // console.log(validRanges, otherTicketNumbers);
 // const result1 = input1;
-// console.log(result1);
+console.log(result1);
 
 
 
@@ -62,7 +62,7 @@ tr.forEach((c, i) => {
     const rule = realRules.filter(rule => {
         const rl = rule.slice(1,3);
         
-        console.log(rl);
+        // console.log(rl);
         const m = c.every(n => {
             
             return rl.some(range => {
