@@ -5,8 +5,12 @@ module.exports = function processFile(file, separators = {
     lineSeparator,
     groupSeparator,
     jsonSeparator,
+    rawText: false
 }) {
     const rawText = fs.readFileSync(file, 'utf8');
+
+    if (separators.rawText) return rawText;
+
     const toJSON = (json, keyValues) => {
         const keyValue = keyValues.split(separators.jsonSeparator);
         json[keyValue[0]] = keyValue[1];
