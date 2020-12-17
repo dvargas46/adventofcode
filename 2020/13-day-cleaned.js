@@ -56,14 +56,14 @@ function divmod(a, b) {
 // The code was originally in Python, which I converted over to es6 along with the Python divmod/mod functions above
 // NOTE: These functions utilize BigInt parameters in order to work properly with large integers greater than 2^53-1
 function combinePeriodAndPhase(a, aAdv, b, bAdv) {
-    const [period, phase] = combinedPhaseRotation(a, mod(-aAdv, a), b, mod(-bAdv, b));
+    const [period, phase] = combinePhasedRotations(a, mod(-aAdv, a), b, mod(-bAdv, b));
     return [phase, period];
 }
 
-function combinedPhaseRotation(aPeriod, aPhase, bPeriod, bPhase) {
+function combinePhasedRotations(aPeriod, aPhase, bPeriod, bPhase) {
     const [gcd, s, t] = extendedGCD(aPeriod, bPeriod);
-    const paseDiff = aPhase - bPhase;
-    const [pdMult, pdRemainder] = divmod(paseDiff, gcd);
+    const phaseDiff = aPhase - bPhase;
+    const [pdMult, pdRemainder] = divmod(phaseDiff, gcd);
 
     if (pdRemainder) throw 'Rotation reference points never synchronize.';
 
