@@ -1,10 +1,10 @@
-const inputfile = './inputs/13-input.txt';
-// const inputfile = './inputs/13-example.txt';
+const inputFile = './inputs/13-input.txt';
+// const inputFile = './inputs/13-example.txt';
 const processFile = require('./file-processor');
 
 
 // PART I
-const input1 = processFile(inputfile, {
+const input1 = processFile(inputFile, {
     lineSeparator: new RegExp('\\n', 'g'),
     groupSeparator: new RegExp(',', 'g'),
 });
@@ -25,22 +25,25 @@ console.log('Answer:', result1);
 const input2 = input1.flat().map((id, index) => [index, id]).filter(data => !isNaN(data[1])).map(data => [BigInt(data[0]), BigInt(data[1])]);
 console.log(input2);
 
-const period_and_phase = input2.reduce((cmb_period_and_phase, next_period_and_phase) => {
-    return arrowAlignment(
-        cmb_period_and_phase[1],
-        -cmb_period_and_phase[0],
-        next_period_and_phase[1],
-        -next_period_and_phase[0]
+const periodAndPhase = input2.reduce((combinedPeriodAndPhase, nextPeriodAndPhase) => {
+    return combinePeriodAndPhase(
+        combinedPeriodAndPhase[1],
+        -combinedPeriodAndPhase[0],
+        nextPeriodAndPhase[1],
+        -nextPeriodAndPhase[0]
     );
 });
 
-console.log(period_and_phase, period_and_phase[1] - period_and_phase[0]);
+console.log('Combined period and phase:', periodAndPhase)
+console.log('Answer:', periodAndPhase[1] - periodAndPhase[0]);
 
+// Python modulus
 function mod(a, b) {
     const [quo, mod] = divmod(a, b);
     return mod;
 }
 
+// Python divmod
 function divmod(a, b) {
     const part = a / b;
     const quo = a%b===0n ? part : (a<0n && b>0n) || (a>0n && b<0n) ? part - 1n : part;
@@ -49,9 +52,12 @@ function divmod(a, b) {
     return [quo, mod];
 }
 
-function arrowAlignment(a, aAdv, b, bAdv) {
-    const [phase, period] = combinedPhaseRotation(a, mod(-aAdv, a), b, mod(-bAdv, b));
-    return [period, phase];
+// Below functions are found here: https://math.stackexchange.com/questions/2218763/how-to-find-lcm-of-two-numbers-when-one-starts-with-an-offset#comment8142700_3864593
+// The code was originally in Python, which I converted over to es6 along with the Python divmod/mod functions above
+// NOTE: These functions utilize BigInt parameters in order to work properly with large integers greater than 2^53-1
+function combinePeriodAndPhase(a, aAdv, b, bAdv) {
+    const [period, phase] = combinedPhaseRotation(a, mod(-aAdv, a), b, mod(-bAdv, b));
+    return [phase, period];
 }
 
 function combinedPhaseRotation(aPeriod, aPhase, bPeriod, bPhase) {
@@ -61,10 +67,8 @@ function combinedPhaseRotation(aPeriod, aPhase, bPeriod, bPhase) {
 
     if (pdRemainder) throw 'Rotation reference points never synchronize.';
 
-    const part = aPeriod / gcd;
-    const quo = aPeriod%gcd===0n ? part : (aPeriod<0n && gcd>0n) || (aPeriod>0n && gcd<0n) ? part - 1n : part;
-
-    const combinedPeriod = part * bPeriod;
+    const [quotient, remainder] = divmod(aPeriod, gcd);
+    const combinedPeriod = quotient * bPeriod;
     const combinedPhase = mod((aPhase - s * pdMult * aPeriod), combinedPeriod);
     return [combinedPeriod, combinedPhase];
 }
