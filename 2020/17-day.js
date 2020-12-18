@@ -3,6 +3,12 @@ const inputFile = './inputs/17-example.txt';
 const processFile = require('./file-processor');
 
 /*
+AFTERTHOUGHTS: So, here I was trying to merge the dimensions into a one-dimensional string and then I could use math to figure out spacial measurements
+--- it didn't go so well XD
+
+
+
+
 During a cycle, all cubes simultaneously change their state according to the following rules:
 
     If a cube is active and exactly 2 or 3 of its neighbors are also active, the cube remains active. Otherwise, the cube becomes inactive.
