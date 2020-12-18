@@ -109,18 +109,23 @@ const trim3D = (str) => {
     return trimAll2DPlanes(trimZSpace(str));
 }
 
-// console.log(input1, input1.length, zLength, squareLength, stringLength);
-// tempSpace = pad3D(input1);
-// console.log(tempSpace, tempSpace.length, zLength, squareLength, stringLength);
-// tempSpace = trim3D(tempSpace);
-// console.log(tempSpace, tempSpace.length, zLength, squareLength, stringLength);
+console.log(input1, input1.length, zLength, squareLength, stringLength);
+tempSpace = pad3D(input1);
+console.log(tempSpace, tempSpace.length, zLength, squareLength, stringLength);
+tempSpace = trim3D(tempSpace);
+console.log(tempSpace, tempSpace.length, zLength, squareLength, stringLength);
 
 const getNeighbors = (str, pos) => {
-    str.split('').filter((_, i) => {
-        return i === pos-squareLength
-            || i === pos+squareLength
+    const zpoz = Math.floor(pos / stringLength);
+    const relpos = pos % stringLength;
+    const res = getZPlanes(str).map((plane, z) => plane.filter((_, i) => {
+        return i !== pos
+            && ( i === pos-squareLength
+                || i === pos+squareLength
+                || i ===  i)
             ;
-    })
+    }));
+    return res;
 }
 
 const simulate = (str) => {
