@@ -1,5 +1,5 @@
-// const inputfile = './inputs/19-input.txt';
-const inputfile = './inputs/19-example.txt';
+const inputfile = './inputs/19-input.txt';
+// const inputfile = './inputs/19-example.txt';
 const processFile = require('./file-processor');
 
 
@@ -21,10 +21,12 @@ console.log(rules);
 
 let finishedRules = [];
 let unfinishedRules = [];
+let myMap = new Map();
 rules.forEach((value, key) => {
     if (value.flat().every(flatSpace => flatSpace === flatSpace.toString() && flatSpace.match(/^[a-z]+$/m))) {
         rules.set(key, value.flat());
         finishedRules.push(key);
+        myMap.set(key, value.flat());
     } else {
         unfinishedRules.push(key);
     }
@@ -36,7 +38,7 @@ function combineAndSpace(originalAndSpace) {
             const combined = [];
             prev.forEach(f => {
                 next.forEach(s => combined.push(f + s));
-                next.reverse().forEach(s => combined.push(f+s));
+                // next.reverse().forEach(s => combined.push(f+s));
             });
             return combined;
         });
@@ -81,6 +83,7 @@ function runMerge() {
             // now see if our new or space can be merged too
             if (combineOrSpace(orSpace)) {
                 newFinishedRules.push(unfinishedKey);
+                myMap.set(unfinishedKey, orSpace);
             } else {
                 newUnfinishedRules.push(unfinishedKey);
             }
@@ -91,26 +94,26 @@ function runMerge() {
     // console.log(rules);
 }
 
-while(unfinishedRules.length) {
-    runMerge();
-    console.log(rules);
-}
+// while(unfinishedRules.length) {
+//     runMerge();
+//     console.log(rules);
+// }
 
-// runMerge();
-// runMerge();
-// runMerge();
-// runMerge();
-// runMerge();
-// runMerge();
-// runMerge();
-// runMerge();
-// runMerge();
+runMerge();
+runMerge();
+runMerge();
+runMerge();
+runMerge(); // still works here
+runMerge();
+runMerge();
+runMerge();
+runMerge();
 
 
 // rules.forEach((value, key) => {
 //     console.log(key, value);
 // });
-console.log('fr',finishedRules, 'ur',unfinishedRules);
+// console.log('fr',finishedRules, 'ur',unfinishedRules);
 
 
 
@@ -126,26 +129,28 @@ console.log('fr',finishedRules, 'ur',unfinishedRules);
 //     return combined;
 // });
 // rules.set('0', [...new Set(allCombined)]);
-console.log(rules.get('0'), messages);
-
-const result = messages.reduce((sum, message) => rules.get('0').some(rule => rule === message) ? sum+1 : sum, 0);
-console.log(result);
-// process.exit(0);
-
-
-
-
-// const rule8 = rules.get('8');
-// const rule11 = rules.get('11');
-// console.log(rules.get('0'), rule8, rule11);
-
-// const combined = [];
-// rule8.forEach(f => {
-//     rule11.forEach(s => combined.push(f + s));
-//     // rule11.reverse().forEach(s => combined.push(f+s));
-// });
-// rules.set('0', [...new Set(combined)]);
-// console.log(rules.get('0'), messages);
+// myMap.set('0', [...new Set(allCombined)])
+// // console.log(rules.get('0'), messages);
 
 // const result = messages.reduce((sum, message) => rules.get('0').some(rule => rule === message) ? sum+1 : sum, 0);
 // console.log(result);
+
+
+
+
+const rule8 = rules.get('8');
+const rule11 = rules.get('11');
+console.log(rules.get('0'), rule8, rule11);
+
+const combined = [];
+rule8.forEach(f => {
+    rule11.forEach(s => combined.push(f + s));
+    // rule11.reverse().forEach(s => combined.push(f+s));
+});
+rules.set('0', [...new Set(combined)]);
+myMap.set('0', [...new Set(combined)])
+// console.log(rules.get('0'), messages);
+
+const result = messages.reduce((sum, message) => rules.get('0').some(rule => rule === message) ? sum+1 : sum, 0);
+console.log(result);
+consolee.log(messages.reduce((a,b) => b.length === 24 ? a+1 : a, 0));
