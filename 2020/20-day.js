@@ -15,8 +15,7 @@ input1.forEach((value, key) => {
     const bottomEdge = rows[rows.length-1];
     const leftEdge = rows.reduce((s,v) => s+v[0]);
     const rightEdge = rows.reduce((s,v) => s+v[v.length]);
-    input1.set(key, [topEdge, rightEdge, bottomEdge, leftEdge
-]);
+    input1.set(key, [topEdge, rightEdge, bottomEdge, leftEdge]);
 });
 
 const rotate = (tile) => tile.unshift(tile.pop());
