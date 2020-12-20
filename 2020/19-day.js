@@ -13,7 +13,7 @@ const input1 = processFile(inputfile, {
 let [rules, messages] = input1;
 rules = rules.reduce((j, r) => {
     const ruleData = r.split(': ');
-    const key = parseInt(ruleData[0]);
+    const key = ruleData[0];
     const value = ruleData[1].replace(/"/g, '').split(/[|]/g).map(v => v.replace(/^\s|\s$/gm, '').split(/\s/g));
     j.set(key, value);
     return j;
@@ -22,7 +22,7 @@ rules = rules.reduce((j, r) => {
 let finishedRules = [];
 let unfinishedRules = [];
 rules.forEach((value, key) => {
-    if (value.flat().every(andSpace => andSpace === andSpace.toString() && andSpace.match(/^[a-z]+$/m))) {
+    if (value.flat().every(flatSpace => flatSpace === flatSpace.toString() && flatSpace.match(/^[a-z]+$/m))) {
         rules.set(key, value.flat());
         finishedRules.push(key);
     } else {
@@ -30,23 +30,58 @@ rules.forEach((value, key) => {
     }
 });
 
-function resolveAndSpace() {
+function combineAndSpace(originalAndSpace) {
+    if (originalAndSpace.length !== 2) {
+        console.log('something is wrong here...');
+    } else {
+        const first = originalAndSpace[0];
+        const second = originalAndSpace[1];
+        const combined = [];
 
+        first.forEach(f => {
+            second.forEach(s => combined.push(f + s));
+            second.reverse().forEach(s => combined.push(f+s));
+        });
+
+        return [...new Set(combined)];
+    }
+}
+
+function resolveAndSpaces() {
+    unfinishedRules.forEach((unfinishedKey) => {
+        const uv = rules.get(unfinishedKey);
+        uv.forEach(andSpace => {
+            if (andSpace.flat().every(flatSpace => flatSpace === flatSpace.toString() && flatSpace.match(/^[a-z]+$/m))) {
+                // console.log(andSpace);
+                andSpace.splice(0, andSpace.length, ...combineAndSpace(andSpace));
+                
+            }
+        });
+    });
 }
 
 finishedRules.forEach(finishedKey => {
     const fv = rules.get(finishedKey);
     unfinishedRules.forEach(unfinishedKey => {
         const uv = rules.get(unfinishedKey);
-        uv.forEach(orSpace => {
-            
+        uv.forEach(andSpace => {
+            andSpace.forEach((subrule, i) => {
+                // console.log(subrule, finishedKey);
+                if (subrule === subrule.toString() && subrule === finishedKey) { // Found rule with matching subrule
+                    andSpace.splice(i, 1, fv);
+                }
+            });
         });
     });
 });
 
+resolveAndSpaces();
+
 console.log(rules, messages, finishedRules, unfinishedRules);
 
-
+rules.forEach((value, key) => {
+    console.log(key, value);
+});
 
 
 
