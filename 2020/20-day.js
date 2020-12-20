@@ -1,5 +1,5 @@
-// const inputfile = './inputs/20-input.txt';
-const inputfile = './inputs/20-example.txt';
+const inputfile = './inputs/20-input.txt';
+// const inputfile = './inputs/20-example.txt';
 const processFile = require('./file-processor');
 
 
@@ -22,32 +22,34 @@ input1.forEach((value, key) => {
     input1.set(key, [topEdge, rightEdge, bottomEdge, leftEdge]);
 });
 
-const rotate = (tile) => tile.unshift(tile.pop());
-const flipHorizontal = (arr) => [arr[1], arr[3]] = [arr[3], arr[1]];
-const flipVertical = (arr) => [arr[0], arr[2]] = [arr[2], arr[0]];
-
 // For part1, we just need the corner pieces - all tiles with only 2 matching edges
 // - Edges should be compared with every other tile's edges, forward and reverse
 // - Collect the tiles that only have 2 matching edges
-
 const corners = [];
 input1.forEach((value1, key1) => {
+    let nMatches = 0;
     input1.forEach((value2, key2) => {
-        if (key1 === key2) {
-            let nMatches = 0;
+        if (key1 !== key2) {
             value1.forEach(v1 => {
                 value2.forEach(v2 => {
-                    if (v1 === v2
-                        || v1.reverse() === v2
-                        || v1 === v2.reverse())
-                        // || v1.reverse() === v2.reverse()) 
+                    if (v1 === v2 || v1.reverse() === v2 || v1 === v2.reverse()) {
+                        console.log('match at', key1, 'to', key2, v1, v2)
                         nMatches++;
+                    }
                 });
             });
-            console.log(value1, nMatches);
-            if (nMatches === 2) corners.push(key1.replace(/[^\d]/g, ''));
         }
     });
+    console.log(value1, nMatches);
+    if (nMatches === 2) corners.push(key1.replace(/[^\d]/g, ''));
 });
 
 console.log(corners);
+console.log(corners.reduce((product, cornerTileId) => product * parseInt(cornerTileId), 1));
+
+
+// PART 2
+
+const rotate = (tile) => tile.unshift(tile.pop());
+const flipHorizontal = (arr) => [arr[1], arr[3]] = [arr[3], arr[1]];
+const flipVertical = (arr) => [arr[0], arr[2]] = [arr[2], arr[0]];
