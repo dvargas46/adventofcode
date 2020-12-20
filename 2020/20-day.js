@@ -10,18 +10,19 @@ const input1 = processFile(inputfile, {
 });
 
 input1.forEach((value, key) => {
-    const binaryArray = [];
-    value.split(/\n/).forEach((rowV, r) => {
-        binaryArray.push([]);
-        rowV.split('').forEach((colV) => {
-            binaryArray[r].push(colV === '#');
-        });
-    });
-    input1.set(key, binaryArray);
+    const rows = value.split(/\n/);
+    const topEdge = rows[0];
+    const bottomEdge = rows[rows.length-1];
+    const leftEdge = rows.reduce((s,v) => s+v[0]);
+    const rightEdge = rows.reduce((s,v) => s+v[v.length]);
+    input1.set(key, [topEdge, rightEdge, bottomEdge, leftEdge
+]);
 });
 
-// Need a function to rotate all directions
-// Need a function to flip vertically/horizontally
+const rotate = (tile) => tile.unshift(tile.pop());
+const flipHoriz = (arr) => [arr[1], arr[3]] = [arr[3], arr[1]];
+const flipVert = (arr) => [arr[0], arr[2]] = [arr[2], arr[0]];
+
 // It's like putting a real puzzle together (except flipping is now an option)
 // Maybe, find the corners first? -- A corner is one that only has 2 matching sides (outer edges don't line up with any other)
 // 
