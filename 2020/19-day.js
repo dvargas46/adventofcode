@@ -64,13 +64,14 @@ finishedRules.forEach(finishedKey => {
     const fv = rules.get(finishedKey);
     unfinishedRules.forEach(unfinishedKey => {
         const uv = rules.get(unfinishedKey);
-        uv.forEach(andSpace => {
+        uv.forEach((andSpace, a) => {
             andSpace.forEach((subrule, i) => {
                 // console.log(subrule, finishedKey);
                 if (subrule === subrule.toString() && subrule === finishedKey) { // Found rule with matching subrule
                     andSpace.splice(i, 1, fv);
                 }
             });
+
         });
     });
 });
