@@ -39,7 +39,7 @@ finishedRules.forEach(finishedKey => {
     unfinishedRules.forEach(unfinishedKey => {
         const uv = rules.get(unfinishedKey);
         uv.forEach(orSpace => {
-
+            
         });
     });
 });
