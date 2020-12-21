@@ -17,36 +17,28 @@ rules = rules.reduce((j, r) => {
     j.set(key, value);
     return j;
 }, new Map());
-// console.log(rules);
 
 let finishedRules = [];
 let unfinishedRules = [];
-// let myMap = new Map();
 rules.forEach((value, key) => {
     if (value.flat().every(flatSpace => flatSpace === flatSpace.toString() && flatSpace.match(/^[a-z]+$/m))) {
         rules.set(key, value.flat());
         finishedRules.push(key);
-        // myMap.set(key, value.flat());
     } else {
         unfinishedRules.push(key);
     }
 });
-// console.log(rules, finishedRules, unfinishedRules);
 
 function combineAndSpace(originalAndSpace) {
         const allCombined = originalAndSpace.reduce((prev, next) => {
             const combined = [];
             prev.forEach(f => {
                 next.forEach(s => combined.push(f + s));
-                // next.reverse().forEach(s => combined.push(f+s));
             });
             return combined;
         });
-
-        // const allCombined = [];
-
-
-        return [...new Set(allCombined)];
+        return allCombined;
+        // return [...new Set(allCombined)];
 }
 
 function combineOrSpace(originalOrSpace) {
@@ -76,14 +68,12 @@ function runMerge() {
                 });
                 // check if the new andspace can be merged up now
                 if (andSpace.every(flatSpace => Array.isArray(flatSpace))) {
-                    // console.log(andSpace);
                     andSpace.splice(0, andSpace.length, ...combineAndSpace(andSpace));
                 }
             });
             // now see if our new or space can be merged too
             if (combineOrSpace(orSpace)) {
                 newFinishedRules.push(unfinishedKey);
-                // myMap.set(unfinishedKey, orSpace);
             } else {
                 newUnfinishedRules.push(unfinishedKey);
             }
@@ -91,152 +81,106 @@ function runMerge() {
         unfinishedRules = [...newUnfinishedRules.splice(0)];
     });
     finishedRules = newFinishedRules;
-    // console.log(rules);
 }
 
-// while(unfinishedRules.length) {
-//     runMerge();
-//     console.log(rules);
-// }
-
-runMerge();
-runMerge();
-runMerge();
-runMerge();
-runMerge(); // still works here
-runMerge();
-runMerge();
-runMerge();
-runMerge();
-
-
-// rules.forEach((value, key) => {
-//     console.log(key, value);
-// });
-// console.log('fr',finishedRules, 'ur',unfinishedRules);
-
-
-
-// const rule0 = rules.get('0');
-// rule0[0][1] = rules.get('1');
-// console.log('rule0',rule0);
-// const allCombined = rule0.flat().reduce((prev, next) => {
-//     const combined = [];
-//     prev.forEach(f => {
-//         next.forEach(s => combined.push(f + s));
-//         next.reverse().forEach(s => combined.push(f+s));
-//     });
-//     return combined;
-// });
-// rules.set('0', [...new Set(allCombined)]);
-// myMap.set('0', [...new Set(allCombined)])
-// // console.log(rules.get('0'), messages);
-
-// const result = messages.reduce((sum, message) => rules.get('0').some(rule => rule === message) ? sum+1 : sum, 0);
-// console.log(result);
-
-
-
+while(unfinishedRules.length > 1) {
+    runMerge();
+}
 
 const rule8 = rules.get('8');
 const rule11 = rules.get('11');
-// console.log(rules.get('0'), rule8, rule11);
 
 const combined = [];
 rule8.forEach(f => {
     rule11.forEach(s => combined.push(f + s));
-    // rule11.reverse().forEach(s => combined.push(f+s));
 });
-rules.set('0', [...new Set(combined)]);
-// myMap.set('0', [...new Set(combined)])
-const rule0 = rules.get('0');
-// console.log(rule0, rule0.length);
-const remainingMessage = [];
-const result = messages.reduce((sum, message) => rules.get('0').some(rule => rule === message) ? sum+1 : (remainingMessage.push(message), sum), 0);
-console.log(result);
-// console.log(messages.reduce((a,b) => b.length === 24 ? a+1 : a, 0));
 
-let com = [];
-// let com2 = [];
+const remainingMessage = [];
+const result = messages.reduce((sum, message) => combined.some(rule => rule === message) ? sum+1 : (remainingMessage.push(message), sum), 0);
+console.log(result);
+
 const rule42 = rules.get('42');
 const rule31 = rules.get('31');
 rules.clear();
 
 console.log('the crunching...', messages.length);
-// rule42.forEach(f => {
-//     rule42.forEach(f2 => {
-//         rule31.forEach(s => {
-//             // const reg = "^" + f + ".*$;^(" + f + ")+(" + f2 + ").*$;^(" + f + ")+(" + f2 + ")+(" + s +"){1,2}$";
-//             const reg = f + f2 + s;
-//             com.push(reg);
-//             // com2.push(f + f2 + s);
-//         });
-//     });
-// });
-// const result9 = messages.reduce((sum, message) => com2.some(rule => rule === message) ? sum+1 : sum, 0);
-// console.log(result9);
-// console.log(com, com.length);
-// 2097152
-// const remainingMessage = [];
-// const result2 = messages.reduce((sum, message, i) => com.some(rule => {
-//     if (message === rule.replace(/[()+^$]/g, '')) { 
-//         console.log('found', i, message, rule.replace(/[()+^$]/g, '')); 
-//         return true; 
-//     } else {
-//         remainingMessage.push(message);
-//     }
-// }) ? (sum+1) : sum, 0);
-// console.log(result2);
-// com = [...new Set(com)];
-console.log('the final stretch', remainingMessage.length, com.length);
-console.log(remainingMessage.reduce((s,m) => m.length > s ? m.length : s, 0));
-// console.log(com.reduce((s,m) => m.length > s ? m.length : s, 0), com[0]);
+console.log('the final stretch', remainingMessage.length);
+console.log('max in remanining', remainingMessage.reduce((s,m) => m.length > s ? m.length : s, 0));
+console.log(
+    '31max',rule31.reduce((a,b) => b.length > a ? b.length : a, 0),
+    '31min',rule31.reduce((a,b) => b.length < a ? b.length : a, 99),
+    '42max',rule42.reduce((a,b) => b.length > a ? b.length : a, 0),
+    '42min',rule42.reduce((a,b) => b.length < a ? b.length : a, 99),
+)
 
-const result3 = remainingMessage.reduce((sum, message, i) => {
-    console.log('searching', i, new Date(), message);
+const result3 = remainingMessage.reduce((sum, message, j) => {
+    let m = false;
     const eightBytes = message.match(/.{1,8}/g);
-     return eightBytes.every((div, i) => {
-        let m = false;
-        if (i === 0) m = rule42.some(v => div === v);
-        if (i !== 0) m = rule42.some(v => div === v) || rule31.some(v => div === v);
-        if (i === remainingMessage.length-1) m = rule31.some(v => div === v);
+    const fullMatch = eightBytes.every((div, i) => {
+        if (i === eightBytes.length-1) {
+            m = rule31.some(v => div === v);
+        } else if (i > eightBytes.length/2) {
+            m = rule42.some(v => div === v) || rule31.some(v => div === v);
+        } else {
+            m = rule42.some(v => div === v);
+        }
         return m;
-    }) ? (sum+1) : sum;
-
-    // return com.some(rule => {
-
-    //     const [a,b,c] = rule.split(';');
-    //     let m1 = message.match(new RegExp(a, 'm'));
-    //     let m2 = m1 && message.match(new RegExp(b, 'm'));
-    //     if (m2) console.log('partial', i, new Date(), message, new RegExp(c, 'm'))
-    //     let m = m2 && message.match(new RegExp(c, 'm')); 
-    //     if (m) console.log('found', i, new Date(), message, new RegExp(c, 'm')); 
-    //     return m;
-    // }) 
-    // ? (sum+1) : sum;
+        
+    });
+    if (fullMatch) console.log('found', j, new Date(), message.length, message);
+    return fullMatch ? (sum+1) : sum;
 }, 0);
-// const result3 = remainingMessage.reduce((sum, message, i) => {
-//     console.log('searching', i, new Date(), message);
-//     return com.some(rule => {
-//         const [a,b,c] = rule.split(';');
-//         let m1 = message.match(new RegExp(a, 'm'));
-//         let m2 = m1 && message.match(new RegExp(b, 'm'));
-//         if (m2) console.log('partial', i, new Date(), message, new RegExp(c, 'm'))
-//         let m = m2 && message.match(new RegExp(c, 'm')); 
-//         if (m) console.log('found', i, new Date(), message, new RegExp(c, 'm')); 
-//         return m;
-//     }) ? (sum+1) : sum;
-// }, 0);
 console.log(result + result3);
 
 
-//  bbabbbbabbabbbba  bbabbbba   bbbabaab
-// (bbabbbbabbabbbba)(bbabbbba)*(bbbabaab)
+// 8: 42 | 42 8
+// 11: 42 31 | 42 11 31
+
+// 42 ... 42 31
+// 42 ... 42 31 31
+// 42 42 31
+// 42 42 42 31
+// 42 42 42 42 31
+// 42 42 42 31 31
+// 42 42 42 42 42 31
+// 42 42 42 42 31 31
+// 42 42 42 42 42 42 31
+// 42 42 42 42 42 31 31
+// 42 42 42 42 31 31 31
+// 42 42 42 42 42 42 42 31
+// 42 42 42 42 42 42 31 31
+// 42 42 42 42 42 31 31 31
+// 42 42 42 42 42 42 42 42 31
+// 42 42 42 42 42 42 42 31 31
+// 42 42 42 42 42 42 31 31 31
+// 42 42 42 42 42 31 31 31 31
+// 42 42 42 42 42 42 42 42 42 31
+// 42 42 42 42 42 42 42 42 31 31
+// 42 42 42 42 42 42 42 31 31 31
+// 42 42 42 42 42 42 31 31 31 31
+// 42 42 42 42 42 42 42 42 42 42 31
+// 42 42 42 42 42 42 42 42 42 31 31
+// 42 42 42 42 42 42 42 42 31 31 31
+// 42 42 42 42 42 42 42 31 31 31 31
+// 42 42 42 42 42 42 31 31 31 31 31
+// 42 42 42 42 42 42 42 42 42 42 42 31
+// 42 42 42 42 42 42 42 42 42 42 31 31
+// 42 42 42 42 42 42 42 42 42 31 31 31
+// 42 42 42 42 42 42 42 42 31 31 31 31
+// 42 42 42 42 42 42 42 31 31 31 31 31
 
 
-//  bbabbbba   bbabbbba   bbbabaab
-// (bbabbbba)+(bbabbbba)+(bbbabaab)
+// 42 42 11 31:               11 = 42 11 31
+// 42 42 42 11 31 31:         11 = 42 11 31
+// 42 42 42 42 11 31 31 31:   11 = 42 31
+// 42 42 42 42 42 31 31 31 31
 
+// 42 42 11 31:                     11 = 42 11 31
+// 42 42 42 11 31 31:               11 = 42 11 31
+// 42 42 42 42 11 31 31 31:         11 = 42 11 31
+// 42 42 42 42 42 11 31 31 31 31:   11 = 42 31
+// 42 42 42 42 42 42 31 31 31 31 31
 
-//  bbabbbba   bbabbbba   bbbabbab
-// (bbabbbba)+(bbabbbba)+(bbbabbab)
+// 42 42 11 31:               11 = 42 11 31
+// 42 42 42 11 31 31:         11 = 42 31
+// 42 42 42 42 31 31 31
