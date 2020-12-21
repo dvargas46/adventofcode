@@ -163,16 +163,16 @@ const rule31 = rules.get('31');
 rules.clear();
 
 console.log('the crunching...', messages.length);
-rule42.forEach(f => {
-    rule42.forEach(f2 => {
-        rule31.forEach(s => {
-            // const reg = "^" + f + ".*$;^(" + f + ")+(" + f2 + ").*$;^(" + f + ")+(" + f2 + ")+(" + s +"){1,2}$";
-            const reg = f + f2 + s;
-            com.push(reg);
-            // com2.push(f + f2 + s);
-        });
-    });
-});
+// rule42.forEach(f => {
+//     rule42.forEach(f2 => {
+//         rule31.forEach(s => {
+//             // const reg = "^" + f + ".*$;^(" + f + ")+(" + f2 + ").*$;^(" + f + ")+(" + f2 + ")+(" + s +"){1,2}$";
+//             const reg = f + f2 + s;
+//             com.push(reg);
+//             // com2.push(f + f2 + s);
+//         });
+//     });
+// });
 // const result9 = messages.reduce((sum, message) => com2.some(rule => rule === message) ? sum+1 : sum, 0);
 // console.log(result9);
 // console.log(com, com.length);
@@ -190,8 +190,31 @@ rule42.forEach(f => {
 // com = [...new Set(com)];
 console.log('the final stretch', remainingMessage.length, com.length);
 console.log(remainingMessage.reduce((s,m) => m.length > s ? m.length : s, 0));
-console.log(com.reduce((s,m) => m.length > s ? m.length : s, 0), com[0]);
+// console.log(com.reduce((s,m) => m.length > s ? m.length : s, 0), com[0]);
 
+const result3 = remainingMessage.reduce((sum, message, i) => {
+    console.log('searching', i, new Date(), message);
+    const eightBytes = message.match(/.{1,8}/g);
+     return eightBytes.every((div, i) => {
+        let m = false;
+        if (i === 0) m = rule42.some(v => div === v);
+        if (i !== 0) m = rule42.some(v => div === v) || rule31.some(v => div === v);
+        if (i === remainingMessage.length-1) m = rule31.some(v => div === v);
+        return m;
+    }) ? (sum+1) : sum;
+
+    // return com.some(rule => {
+
+    //     const [a,b,c] = rule.split(';');
+    //     let m1 = message.match(new RegExp(a, 'm'));
+    //     let m2 = m1 && message.match(new RegExp(b, 'm'));
+    //     if (m2) console.log('partial', i, new Date(), message, new RegExp(c, 'm'))
+    //     let m = m2 && message.match(new RegExp(c, 'm')); 
+    //     if (m) console.log('found', i, new Date(), message, new RegExp(c, 'm')); 
+    //     return m;
+    // }) 
+    // ? (sum+1) : sum;
+}, 0);
 // const result3 = remainingMessage.reduce((sum, message, i) => {
 //     console.log('searching', i, new Date(), message);
 //     return com.some(rule => {
@@ -204,7 +227,7 @@ console.log(com.reduce((s,m) => m.length > s ? m.length : s, 0), com[0]);
 //         return m;
 //     }) ? (sum+1) : sum;
 // }, 0);
-// console.log(result + result3);
+console.log(result + result3);
 
 
 //  bbabbbbabbabbbba  bbabbbba   bbbabaab
