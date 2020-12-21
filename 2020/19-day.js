@@ -17,16 +17,16 @@ rules = rules.reduce((j, r) => {
     j.set(key, value);
     return j;
 }, new Map());
-console.log(rules);
+// console.log(rules);
 
 let finishedRules = [];
 let unfinishedRules = [];
-let myMap = new Map();
+// let myMap = new Map();
 rules.forEach((value, key) => {
     if (value.flat().every(flatSpace => flatSpace === flatSpace.toString() && flatSpace.match(/^[a-z]+$/m))) {
         rules.set(key, value.flat());
         finishedRules.push(key);
-        myMap.set(key, value.flat());
+        // myMap.set(key, value.flat());
     } else {
         unfinishedRules.push(key);
     }
@@ -83,7 +83,7 @@ function runMerge() {
             // now see if our new or space can be merged too
             if (combineOrSpace(orSpace)) {
                 newFinishedRules.push(unfinishedKey);
-                myMap.set(unfinishedKey, orSpace);
+                // myMap.set(unfinishedKey, orSpace);
             } else {
                 newUnfinishedRules.push(unfinishedKey);
             }
@@ -140,7 +140,7 @@ runMerge();
 
 const rule8 = rules.get('8');
 const rule11 = rules.get('11');
-console.log(rules.get('0'), rule8, rule11);
+// console.log(rules.get('0'), rule8, rule11);
 
 const combined = [];
 rule8.forEach(f => {
@@ -148,9 +148,72 @@ rule8.forEach(f => {
     // rule11.reverse().forEach(s => combined.push(f+s));
 });
 rules.set('0', [...new Set(combined)]);
-myMap.set('0', [...new Set(combined)])
-// console.log(rules.get('0'), messages);
-
-const result = messages.reduce((sum, message) => rules.get('0').some(rule => rule === message) ? sum+1 : sum, 0);
+// myMap.set('0', [...new Set(combined)])
+const rule0 = rules.get('0');
+// console.log(rule0, rule0.length);
+const remainingMessage = [];
+const result = messages.reduce((sum, message) => rules.get('0').some(rule => rule === message) ? sum+1 : (remainingMessage.push(message), sum), 0);
 console.log(result);
-consolee.log(messages.reduce((a,b) => b.length === 24 ? a+1 : a, 0));
+// console.log(messages.reduce((a,b) => b.length === 24 ? a+1 : a, 0));
+
+let com = [];
+// let com2 = [];
+const rule42 = rules.get('42');
+const rule31 = rules.get('31');
+rules.clear();
+
+console.log('the crunching...', messages.length);
+rule42.forEach(f => {
+    rule42.forEach(f2 => {
+        rule31.forEach(s => {
+            // const reg = "^" + f + ".*$;^(" + f + ")+(" + f2 + ").*$;^(" + f + ")+(" + f2 + ")+(" + s +"){1,2}$";
+            const reg = f + f2 + s;
+            com.push(reg);
+            // com2.push(f + f2 + s);
+        });
+    });
+});
+// const result9 = messages.reduce((sum, message) => com2.some(rule => rule === message) ? sum+1 : sum, 0);
+// console.log(result9);
+// console.log(com, com.length);
+// 2097152
+// const remainingMessage = [];
+// const result2 = messages.reduce((sum, message, i) => com.some(rule => {
+//     if (message === rule.replace(/[()+^$]/g, '')) { 
+//         console.log('found', i, message, rule.replace(/[()+^$]/g, '')); 
+//         return true; 
+//     } else {
+//         remainingMessage.push(message);
+//     }
+// }) ? (sum+1) : sum, 0);
+// console.log(result2);
+// com = [...new Set(com)];
+console.log('the final stretch', remainingMessage.length, com.length);
+console.log(remainingMessage.reduce((s,m) => m.length > s ? m.length : s, 0));
+console.log(com.reduce((s,m) => m.length > s ? m.length : s, 0), com[0]);
+
+// const result3 = remainingMessage.reduce((sum, message, i) => {
+//     console.log('searching', i, new Date(), message);
+//     return com.some(rule => {
+//         const [a,b,c] = rule.split(';');
+//         let m1 = message.match(new RegExp(a, 'm'));
+//         let m2 = m1 && message.match(new RegExp(b, 'm'));
+//         if (m2) console.log('partial', i, new Date(), message, new RegExp(c, 'm'))
+//         let m = m2 && message.match(new RegExp(c, 'm')); 
+//         if (m) console.log('found', i, new Date(), message, new RegExp(c, 'm')); 
+//         return m;
+//     }) ? (sum+1) : sum;
+// }, 0);
+// console.log(result + result3);
+
+
+//  bbabbbbabbabbbba  bbabbbba   bbbabaab
+// (bbabbbbabbabbbba)(bbabbbba)*(bbbabaab)
+
+
+//  bbabbbba   bbabbbba   bbbabaab
+// (bbabbbba)+(bbabbbba)+(bbbabaab)
+
+
+//  bbabbbba   bbabbbba   bbbabbab
+// (bbabbbba)+(bbabbbba)+(bbbabbab)
