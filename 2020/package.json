@@ -14,7 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.4.0",
     "combinations-js": "^1.1.2",
-    "compute-lcm": "^1.1.2"
+    "compute-lcm": "^1.1.2",
+    "mnemonist": "^0.38.1"
   }
 }
