@@ -1,5 +1,5 @@
-// const inputfile = './inputs/24-input.txt';
-const inputfile = './inputs/24-example.txt';
+const inputfile = './inputs/24-input.txt';
+// const inputfile = './inputs/24-example.txt';
 const processFile = require('./file-processor');
 
 
@@ -52,171 +52,161 @@ locations.forEach(location => {
         }
     }
 });
+console.log('PART I');
+// console.log(locations, whiteHexagons, blackHexagons);
+console.log('Number of white tiles', whiteHexagons.length);
+console.log('Number of black tiles', blackHexagons.length);
+console.log();
 
-console.log(locations, whiteHexagons, blackHexagons);
-console.log(locations.length, whiteHexagons.length, blackHexagons.length);
 
 
 // PART II
-// Add remaining white tiles
+const largestBX = blackHexagons.reduce((LX, b) => Math.abs(b[1]) > LX ? Math.abs(b[1]) : LX, 0);
+const largestBY = blackHexagons.reduce((LY, b) => Math.abs(b[0]) > LY ? Math.abs(b[0]) : LY, 0);
 
-// WHS = whiteHexagons.map(w => JSON.stringify(w));
-// for (let i=-50; i<=50; i++) {
-//     for (let j=-50; j<=50; j++) {
-//         const loc = [i, j];
-//         const locStr = `${i}${j}`
-//         if (!WHS.some(w => locStr === w)) {
-//             whiteHexagons.push(loc);
-//         }
-//     }
-// }
-// console.log(whiteHexagons);
-// process.exit(0);
-
-const runDay = (i) => {
-    const newBlackTiles = [];
-    const newWhiteTiles = [];
-    whiteHexagons.forEach(w => {
-        let x = y = 0;
-        let blackTileCount = 0;
-        let tileExists = false;
-        // check all neighbors
-        // 'sw'
-        y = w[0]+1;
-        x = w[1]-1;
-        tileExists = blackHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            blackTileCount++;
+let grid = Array.from({length: largestBY*2+1}, () => {
+    return Array.from({length: largestBX*2+1}, () => false);
+});
+for (let i=0; i<largestBX*2+1; i++) {
+    for (let j=0; j<largestBY*2+1; j++) {
+        const loc = [j-largestBY, i-largestBX];
+        const isBlack = blackHexagons.some((b) => JSON.stringify(loc) === JSON.stringify(b));
+        if (isBlack) {
+            grid[j][i] = true;
         }
-        // 'se'
-        y = w[0]+1;
-        x = w[1]+1;
-        tileExists = blackHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            blackTileCount++;
-        }
-        // 'ny = w'
-        y = w[0]-1;
-        x = w[1]-1;
-        tileExists = blackHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            blackTileCount++;
-        }
-        // 'ne'
-        y = w[0]-1;
-        x = w[1]+1;
-        tileExists = blackHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            blackTileCount++;
-        }
-        // 'y = w'
-        y = w[0];
-        x = w[1]-2;
-        tileExists = blackHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            blackTileCount++;
-        }
-        // 'e'
-        y = w[0];
-        x = w[1]+2;
-        tileExists = blackHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            blackTileCount++;
-        }
-    
-        if (blackTileCount == 2) {
-            newBlackTiles.push(w);
-        } else {
-            newWhiteTiles.push(w);
-        }
-    });
-    blackHexagons.forEach(b => {
-        let x, y;
-        let whiteTileCount = 0;
-        let tileExists = false;
-        // check all neighbors
-        // 'sw'
-        y = b[0]+1;
-        x = b[1]-1;
-        tileExists = whiteHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            whiteTileCount++;
-        }
-        // 'se'
-        y = b[0]+1;
-        x = b[1]+1;
-        tileExists = whiteHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            whiteTileCount++;
-        }
-        // 'nw'
-        y = b[0]-1;
-        x = b[1]-1;
-        tileExists = whiteHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            whiteTileCount++;
-        }
-        // 'ne'
-        y = b[0]-1;
-        x = b[1]+1;
-        tileExists = whiteHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            whiteTileCount++;
-        }
-        // 'y = w'
-        y = b[0];
-        x = b[1]-2;
-        tileExists = whiteHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            whiteTileCount++;
-        }
-        // 'e'
-        y = b[0];
-        x = b[1]+2;
-        tileExists = whiteHexagons.some((b) => JSON.stringify([y,x]) === JSON.stringify(b));
-        if (!tileExists) {
-            whiteHexagons.push([y,x]);
-        } else {
-            whiteTileCount++;
-        }
-    
-        if (whiteTileCount == 0 || whiteTileCount > 2) {
-            newWhiteTiles.push(b);
-        } else {
-            newBlackTiles.push(b);
-        }
-    });
-    whiteHexagons = newWhiteTiles;
-    blackHexagons = newBlackTiles;
-
-    console.log('day', i+1, 'w', whiteHexagons.length, 'b', blackHexagons.length);
+    }
 }
 
-Array.from({length: 10}, (_, i) => {
-    runDay(i);
-})
+const printGrid = (matrix) => console.log(matrix.map(v => v.map(v2 => v2 ? 1 : 0).join(',')).join('\n'), '\n');
+const countOfBlackTiles = () => grid.reduce((sum, row) => sum + row.reduce((subtotal, black) => black ? subtotal+1 : subtotal, 0), 0);
 
-// console.log(locations, whiteHexagons, blackHexagons);
-console.log(whiteHexagons.length, blackHexagons.length);
+// console.log('day', 0, countOfBlackTiles());
+const simulateDay = () => {
+    let updatedGrid = [];
+    let updatedGridRow = [];
+    padXYSpace(grid);
+    const lenY = grid.length;
+    for(let y=0; y<lenY; y++) {
+        const lenX = grid[y].length;
+        for(let x=0; x<lenX; x++) {
+            const se = y-1>=0 && x+1<lenX           ? grid[y-1][x+1] : false;
+            const sw = y-1>=0 && x-1>=0                     ? grid[y-1][x-1] : false;
+            const ne = y+1<lenY && x+1<lenX  ? grid[y+1][x+1] : false;
+            const nw = y+1<lenY && x-1>=0            ? grid[y+1][x-1] : false;
+            const w  = x-2>=0                               ? grid[y][x-2] : false;
+            const e  = x+2<lenX                     ? grid[y][x+2] : false;
+    
+            const count = [se, sw, ne, nw, w, e].reduce((count, black) => black ? count+1 : count, 0);
+            
+            switch(grid[y][x]) {
+                case true:
+                    if (count == 0 || count > 2) {
+                        updatedGridRow.push(false);
+                    } else {
+                        updatedGridRow.push(true);
+                    }
+                    break;
+                case false:
+                    if (count == 2) {
+                        updatedGridRow.push(true);
+                    } else {
+                        updatedGridRow.push(false);
+                    }
+                    break;
+            }
+        }
+        updatedGrid.push(updatedGridRow);
+        updatedGridRow = [];
+    }
+    grid = updatedGrid;
+    trimXYSpace(grid);
+}
+// printGrid();
+
+const MAX_DAYS = 100;
+Array.from({length: MAX_DAYS}, (_, i) => {
+    // printGrid(grid);
+    simulateDay();
+    // printGrid(grid);
+    // console.log('day', i+1, countOfBlackTiles());
+});
+console.log('PART II');
+console.log('day', MAX_DAYS);
+console.log('Number of black tiles', countOfBlackTiles());
+
+
+
+/*
+    HELPER FUNCTIONS
+*/
+function padYSpace(matrix) {
+    const newY = Array.from({length: matrix[0].length}, () => false);
+    matrix.unshift([...newY]);
+    matrix.unshift([...newY]);
+    matrix.push([...newY]);
+    matrix.push([...newY]);
+}
+function padXSpace(matrix) {
+    matrix.forEach(y => {
+        y.unshift(false);
+        y.unshift(false);
+        y.push(false);
+        y.push(false);
+    });
+}
+function padXYSpace(matrix) {
+    padXSpace(matrix);
+    padYSpace(matrix);
+}
+
+function trimYSpace (matrix) {
+    let keepTrimming = true;
+    let trimFromAboveCount = 0;
+    let trimFromBelowCount = 0;
+    const trim = (y, above) => {
+        if (keepTrimming) {
+            if (matrix[y].every(x => !x)) {
+                above ? trimFromAboveCount++ : trimFromBelowCount++;
+            } else {
+                keepTrimming = false;
+            }
+        }
+    }
+    Array.from({length: matrix.length}, (_, y) => trim(y, true));
+    if (trimFromAboveCount) 
+        Array.from({length: trimFromAboveCount}, (_, y) => matrix.shift());
+    keepTrimming = true;
+    const len = matrix.length;
+    Array.from({length: len}, (_, z) => trim(len-1-z, false));
+    if (trimFromBelowCount) 
+        Array.from({length: trimFromBelowCount}, (_, y) => matrix.pop());
+}
+function trimXSpace(matrix) {
+    let keepTrimming = true;
+    let trimFromLeftCount = 0;
+    let trimFromRightCount = 0;
+    const trim = (x, left) => {
+        if (keepTrimming) {
+            if (Array.from({length: matrix.length}, (_, y) => !matrix[y][x]).every(yi => yi)) {
+                left ? trimFromLeftCount++ : trimFromRightCount++;
+            } else {
+                keepTrimming = false;
+            }
+        }
+    }
+    Array.from({length: matrix[0].length}, (_, x) => trim(x, true));
+    if (trimFromLeftCount) 
+        Array.from({length: matrix.length}, (_, y) => 
+            Array.from({length: trimFromLeftCount}, () => matrix[y].shift()));
+    keepTrimming = true;
+
+    const len = matrix[0].length;
+    Array.from({length: len}, (_, x) => trim(len - 1 - x, false));
+    if (trimFromRightCount) 
+        Array.from({length: matrix.length}, (_, y) => 
+            Array.from({length: trimFromRightCount}, () => matrix[y].pop()));
+}
+function trimXYSpace(matrix) {
+    trimYSpace(matrix);
+    trimXSpace(matrix);
+}
