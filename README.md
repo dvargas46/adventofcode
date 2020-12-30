@@ -21,3 +21,4 @@ Feel free to run whichever day using the appropriate language as specified in th
 
 ## TODO
 - Create a README within each year for any specific details during the year (e.g. afterthoughts, execution instructions, etc)
+- Make it easier to run any specific day (maybe npm scripts or a small node app?)
