@@ -1,7 +1,6 @@
 const inputfile = './inputs/13-input.txt';
 // const inputfile = './inputs/13-example.txt';
 const processFile = require('./file-processor');
-const lcm = require('compute-lcm');
 
 
 // PART I
@@ -31,6 +30,12 @@ console.log(result1);
 
 
 // PART II
+// AFTERTHOUGHTS: This day was the turning point for me. In order to solve part2 (since I didn't know anything about CRT),
+// I researched on a way to compute the LCM of numbers with an offset, which led me to this Math StackExchange post:
+//  https://math.stackexchange.com/questions/2218763/how-to-find-lcm-of-two-numbers-when-one-starts-with-an-offset#comment8142700_3864593
+// So, I used that Python code in TIO.run (slightly modified) to get the answer.
+// The below code will not produce the correct answer at all (mainly just testing stuff initially).
+// See the cleaned up version to see how I converted that Py code into JS to get the right answer.
 console.log(input1);
 const input2 = input1
     .flat()
